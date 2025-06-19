@@ -73,3 +73,19 @@ stages:
       hash: md5
       md5: 05a8936902dcc26e7879aba4119d130b
       size: 3967992
+  train_model:
+    cmd: poetry run python src/models/train_eval.py
+    deps:
+    - path: data/processed/current_data.csv
+      hash: md5
+      md5: 358234e44c05ddd7d7d2c4f15f4e3629
+      size: 28496
+    - path: src/models/train_eval.py
+      hash: md5
+      md5: c4bd296c1b2ae05475ec4cff32fd625b
+      size: 1659
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 24c97430518e158dae6a862bcbd14d5c
+      size: 1281122
