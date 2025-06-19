@@ -36,3 +36,11 @@ stages:
       - data/processed/reference_dataset.csv
     outs:
       - reports/stability_tests_report.html
+
+  train_model:
+    cmd: poetry run python src/models/train_eval.py
+    deps:
+      - src/models/train_eval.py
+      - data/processed/current_data.csv
+    outs:
+      - models/model.pkl
