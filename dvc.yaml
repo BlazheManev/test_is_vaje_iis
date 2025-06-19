@@ -12,3 +12,9 @@ stages:
     outs:
       - data/processed/current_data.csv
     always_changed: true
+
+  validate_data:
+    cmd: poetry run python src/validation/validate_data.py
+    deps:
+      - src/validation/validate_data.py
+      - data/processed/current_data.csv
