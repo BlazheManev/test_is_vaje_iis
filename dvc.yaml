@@ -1,0 +1,14 @@
+stages:
+  process_data:
+    cmd: |
+      poetry run python src/data/process_data.py
+      git commit -am "🔄 Auto-update processed data on $(date)" || exit 0
+      git push || exit 0
+      dvc push || exit 0
+    deps:
+      - src/data/process_data.py
+      - data/raw/students_scores.csv
+      - data/raw/students.xlsx
+    outs:
+      - data/processed/current_data.csv
+    always_changed: true

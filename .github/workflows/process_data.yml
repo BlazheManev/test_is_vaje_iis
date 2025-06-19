@@ -1,0 +1,58 @@
+name: 🔄 Data Pipeline (on Push & PR)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  process_data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install Poetry
+      run: pipx install poetry
+
+    - name: Install DVC
+      run: pip install dvc[s3]
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        cache: poetry
+
+    - name: Configure Git
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+
+    - name: Install dependencies
+      run: poetry install --no-root
+
+    - name: Setup DVC remote
+      run: |
+        dvc remote modify origin --local access_key_id ${{ secrets.DVC_ACCESS_KEY }}
+        dvc remote modify origin --local secret_access_key ${{ secrets.DVC_SECRET_KEY }}
+      continue-on-error: true
+
+    - name: 🔽 Pull DVC-tracked data
+      run: |
+        dvc pull || echo "nothing to pull"
+
+    - name: ▶️ Run DVC pipeline
+      run: dvc repro
+
+    - name: ⬆️ Push outputs
+      run: |
+        dvc push || echo ""
+        git add .
+        git commit -m "🔁 GitHub Action: Updated processed data on $(date)" || true
+        git push || echo "Nothing to push"

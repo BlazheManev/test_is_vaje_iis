@@ -1,0 +1,24 @@
+schema: '2.0'
+stages:
+  process_data:
+    cmd: "poetry run python src/data/process_data.py\ngit commit -am \"🔄 Auto-update
+      processed data on $(date)\" || exit 0\ngit push || exit 0\ndvc push || exit
+      0\n"
+    deps:
+    - path: data/raw/students.xlsx
+      hash: md5
+      md5: 40ce7faff0a9c94c2ff4e89124a8d528
+      size: 23777
+    - path: data/raw/students_scores.csv
+      hash: md5
+      md5: ec2cffc176b22a9fff1d7c8515c6f7a6
+      size: 3751
+    - path: src/data/process_data.py
+      hash: md5
+      md5: 4d00bff7a0ee0d06935ac510ca206da1
+      size: 1284
+    outs:
+    - path: data/processed/current_data.csv
+      hash: md5
+      md5: 358234e44c05ddd7d7d2c4f15f4e3629
+      size: 28496
