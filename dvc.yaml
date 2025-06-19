@@ -18,3 +18,21 @@ stages:
     deps:
       - src/validation/validate_data.py
       - data/processed/current_data.csv
+
+  data_drift:
+    cmd: poetry run python src/data/drift_report.py
+    deps:
+      - src/data/drift_report.py
+      - data/processed/current_data.csv
+      - data/processed/reference_dataset.csv
+    outs:
+      - reports/data_drift_report.html
+
+  stability_tests:
+    cmd: poetry run python src/data/stability_tests.py
+    deps:
+      - src/data/stability_tests.py
+      - data/processed/current_data.csv
+      - data/processed/reference_dataset.csv
+    outs:
+      - reports/stability_tests_report.html

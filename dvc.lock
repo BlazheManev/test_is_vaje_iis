@@ -22,3 +22,54 @@ stages:
       hash: md5
       md5: 358234e44c05ddd7d7d2c4f15f4e3629
       size: 28496
+  validate_data:
+    cmd: poetry run python src/validation/validate_data.py
+    deps:
+    - path: data/processed/current_data.csv
+      hash: md5
+      md5: 358234e44c05ddd7d7d2c4f15f4e3629
+      size: 28496
+    - path: src/validation/validate_data.py
+      hash: md5
+      md5: c36b89834e9d595e2598b22e69d6a0fe
+      size: 1113
+  data_drift:
+    cmd: poetry run python src/data/drift_report.py
+    deps:
+    - path: data/processed/current_data.csv
+      hash: md5
+      md5: 358234e44c05ddd7d7d2c4f15f4e3629
+      size: 28496
+    - path: data/processed/reference_dataset.csv
+      hash: md5
+      md5: e7b09534626083cfde7a2439bc20871b
+      size: 25937
+    - path: src/data/drift_report.py
+      hash: md5
+      md5: 53a083c9921b2a4c137ff723962f841f
+      size: 1019
+    outs:
+    - path: reports/data_drift_report.html
+      hash: md5
+      md5: 1f7403aff5fff4ddb372a2e68b7b2e17
+      size: 3967992
+  stability_tests:
+    cmd: poetry run python src/data/stability_tests.py
+    deps:
+    - path: data/processed/current_data.csv
+      hash: md5
+      md5: 358234e44c05ddd7d7d2c4f15f4e3629
+      size: 28496
+    - path: data/processed/reference_dataset.csv
+      hash: md5
+      md5: e7b09534626083cfde7a2439bc20871b
+      size: 25937
+    - path: src/data/stability_tests.py
+      hash: md5
+      md5: 5983fd30cdc394f9e82e5a8907b86f44
+      size: 1376
+    outs:
+    - path: reports/stability_tests_report.html
+      hash: md5
+      md5: 05a8936902dcc26e7879aba4119d130b
+      size: 3967992
